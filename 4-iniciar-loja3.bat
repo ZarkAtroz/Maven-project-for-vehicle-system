@@ -6,8 +6,8 @@ title LOJA 3 - Sistema de Veiculos
 :: Edite MEU_IP com o IP desta maquina (ipconfig)
 :: Edite IP_FABRICA com o IP do PC1
 :: =====================================================
-SET MEU_IP=192.168.1.11
-SET IP_FABRICA=192.168.1.10
+SET MEU_IP=localhost
+SET IP_FABRICA=localhost
 
 echo ========================================
 echo INICIANDO LOJA 3
