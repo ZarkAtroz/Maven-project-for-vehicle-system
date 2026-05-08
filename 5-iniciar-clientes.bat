@@ -8,10 +8,10 @@ title CLIENTES - Sistema de Veiculos
 :: Edite IP_LOJA2 com o IP do PC2 (Loja 2)
 :: Edite IP_LOJA3 com o IP do PC2 (Loja 3)
 :: =====================================================
-SET MEU_IP=localhost
-SET IP_LOJA1=localhost
-SET IP_LOJA2=localhost
-SET IP_LOJA3=localhost
+SET MEU_IP=172.20.10.3
+SET IP_LOJA1=172.20.10.2
+SET IP_LOJA2=172.20.10.2
+SET IP_LOJA3=172.20.10.2
 
 echo ========================================
 echo INICIANDO CLIENTES (20 threads)

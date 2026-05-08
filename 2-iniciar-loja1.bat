@@ -6,8 +6,8 @@ title LOJA 1 - Sistema de Veiculos
 :: Edite MEU_IP com o IP desta maquina (ipconfig)
 :: IP_FABRICA = mesmo IP pois esta no mesmo PC
 :: =====================================================
-SET MEU_IP=localhost
-SET IP_FABRICA=localhost
+SET MEU_IP=172.20.10.2
+SET IP_FABRICA=172.20.10.5
 
 echo ========================================
 echo INICIANDO LOJA 1

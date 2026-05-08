@@ -5,7 +5,7 @@ title FABRICA - Sistema de Veiculos
 :: PC1 — roda a FABRICA
 :: Edite MEU_IP com o IP desta maquina (ipconfig)
 :: =====================================================
-SET MEU_IP=localhost
+SET MEU_IP=172.20.10.5
 
 echo ========================================
 echo INICIANDO FABRICA
