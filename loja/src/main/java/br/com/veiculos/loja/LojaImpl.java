@@ -8,9 +8,9 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Implementação da loja de veículos usando RMI.
- */
+
+
+
 public class LojaImpl extends UnicastRemoteObject implements LojaRemota {
     private static final long serialVersionUID = 1L;
 
@@ -24,14 +24,14 @@ public class LojaImpl extends UnicastRemoteObject implements LojaRemota {
     private final AtomicInteger totalRecebidos;
     private final AtomicInteger totalVendidos;
 
-    /**
-     * Construtor da loja.
-     *
-     * @param id                 identificador da loja (1, 2 ou 3)
-     * @param hostFabrica        endereço do host da fábrica
-     * @param capacidadeEsteira  capacidade da esteira local
-     * @throws RemoteException em caso de erro RMI
-     */
+    
+
+
+
+
+
+
+
     public LojaImpl(int id, String hostFabrica, int capacidadeEsteira) throws RemoteException {
         super();
 
@@ -45,37 +45,37 @@ public class LojaImpl extends UnicastRemoteObject implements LojaRemota {
         this.totalVendidos = new AtomicInteger(0);
     }
 
-    /**
-     * Vende um veículo para um cliente.
-     * Bloqueia se não houver veículos disponíveis na esteira local.
-     *
-     * @param idCliente identificador do cliente comprador
-     * @return o veículo vendido
-     * @throws RemoteException em caso de erro de comunicação RMI
-     */
+    
+
+
+
+
+
+
+
     @Override
     public Veiculo comprarVeiculo(int idCliente) throws RemoteException {
         try {
-            // 1. Retira veículo da esteira local (bloqueia se vazia)
+            
             Veiculo v = esteiraLocal.retirar();
 
-            // 2. Incrementa contador de vendidos
+            
             int vendidos = totalVendidos.incrementAndGet();
 
-            // 3. Registra no log
+            
             log.vendaParaCliente(v, idCliente);
 
-            // Print em tempo real
+            
             System.out.println("[LOJA-" + id + "] vendeu para Cliente-" + idCliente + ": " + v);
 
-            // Resumo a cada 5 vendas
+            
             if (vendidos % 5 == 0) {
                 System.out.println("[LOJA-" + id + "] resumo: recebidos=" + totalRecebidos.get()
                         + " | vendidos=" + vendidos
                         + " | em estoque=" + esteiraLocal.tamanhoAtual());
             }
 
-            // 4. Retorna o veículo
+            
             return v;
 
         } catch (InterruptedException e) {
@@ -84,12 +84,12 @@ public class LojaImpl extends UnicastRemoteObject implements LojaRemota {
         }
     }
 
-    /**
-     * Obtém o estado atual da loja.
-     *
-     * @return estado da loja
-     * @throws RemoteException em caso de erro de comunicação RMI
-     */
+    
+
+
+
+
+
     @Override
     public EstadoLoja getEstado() throws RemoteException {
         return new EstadoLoja(
@@ -101,37 +101,37 @@ public class LojaImpl extends UnicastRemoteObject implements LojaRemota {
         );
     }
 
-    /**
-     * Inicia a loja: conecta à fábrica, inicia abastecimento e registra no RMI.
-     *
-     * @throws RemoteException em caso de erro RMI
-     */
+    
+
+
+
+
     public void iniciar() throws RemoteException {
         try {
-            // 1. Conecta à fábrica
+            
             Registry r = LocateRegistry.getRegistry(hostFabrica, 1099);
             fabrica = (FabricaRemota) r.lookup("Fabrica");
 
-            // 2. Inicia thread de abastecimento
+            
             Thread threadAbastecimento = new Thread(() -> {
                 while (true) {
                     try {
-                        // Solicita veículo da fábrica (bloqueia se não houver)
+                        
                         Veiculo v = fabrica.solicitarVeiculo(id);
 
-                        // Insere na esteira local (bloqueia se estiver cheia)
+                        
                         int pos = esteiraLocal.inserir(v);
 
-                        // Atualiza posição na esteira da loja
+                        
                         v.setPosEsteiraLoja(pos);
 
-                        // Incrementa contador de recebidos
+                        
                         totalRecebidos.incrementAndGet();
 
-                        // Registra no log
+                        
                         log.recebimentoNaLoja(v, id);
 
-                        // Print em tempo real
+                        
                         System.out.println("[LOJA-" + id + "] recebeu: " + v + " | PosLoja=" + pos);
 
                     } catch (RemoteException e) {
@@ -145,11 +145,11 @@ public class LojaImpl extends UnicastRemoteObject implements LojaRemota {
 
             threadAbastecimento.start();
 
-            // 3. Registra a si mesmo no RMI registry
+            
             Registry registry = LocateRegistry.createRegistry(1099 + id);
             registry.bind("Loja" + id, this);
 
-            // 4. Imprime confirmação
+            
             System.out.println("✓ Loja " + id + " online — porta " + (1099 + id));
 
         } catch (Exception e) {

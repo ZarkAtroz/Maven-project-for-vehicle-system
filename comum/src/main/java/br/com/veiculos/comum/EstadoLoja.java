@@ -2,9 +2,9 @@ package br.com.veiculos.comum;
 
 import java.io.Serializable;
 
-/**
- * Estado de uma loja de veículos.
- */
+
+
+
 public class EstadoLoja implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -14,15 +14,15 @@ public class EstadoLoja implements Serializable {
     private final int totalRecebidos;
     private final int totalVendidos;
 
-    /**
-     * Construtor completo.
-     *
-     * @param id                  identificador da loja
-     * @param veiculosNaEsteira   quantidade atual de veículos na esteira
-     * @param capacidadeEsteira   capacidade máxima da esteira
-     * @param totalRecebidos      total de veículos recebidos da fábrica
-     * @param totalVendidos       total de veículos vendidos
-     */
+    
+
+
+
+
+
+
+
+
     public EstadoLoja(int id, int veiculosNaEsteira, int capacidadeEsteira,
                       int totalRecebidos, int totalVendidos) {
         this.id = id;

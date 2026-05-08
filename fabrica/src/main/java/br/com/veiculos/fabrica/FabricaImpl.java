@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Implementação da fábrica de veículos usando RMI.
- */
+
+
+
 public class FabricaImpl extends UnicastRemoteObject implements FabricaRemota {
     private static final long serialVersionUID = 1L;
 
@@ -23,11 +23,11 @@ public class FabricaImpl extends UnicastRemoteObject implements FabricaRemota {
     private final List<Estacao> estacoes;
     private final AtomicInteger totalProduzidos;
 
-    /**
-     * Construtor da fábrica.
-     *
-     * @throws RemoteException em caso de erro RMI
-     */
+    
+
+
+
+
     public FabricaImpl() throws RemoteException {
         super();
 
@@ -37,33 +37,33 @@ public class FabricaImpl extends UnicastRemoteObject implements FabricaRemota {
         this.estacoes = new ArrayList<>();
         this.totalProduzidos = new AtomicInteger(0);
 
-        // Cria 4 estações (ids 1 a 4)
+        
         for (int i = 1; i <= 4; i++) {
             estacoes.add(new Estacao(i, estoqueGlobal, esteiraSaida));
         }
     }
 
-    /**
-     * Solicita um veículo da fábrica para uma loja.
-     * Bloqueia se não houver veículos disponíveis na esteira.
-     *
-     * @param idLoja identificador da loja solicitante
-     * @return o veículo produzido
-     * @throws RemoteException em caso de erro de comunicação RMI
-     */
+    
+
+
+
+
+
+
+
     @Override
     public Veiculo solicitarVeiculo(int idLoja) throws RemoteException {
         try {
-            // 1. Retira veículo da esteira (bloqueia se vazia)
+            
             Veiculo v = esteiraSaida.retirar();
 
-            // 2. Seta o ID da loja
+            
             v.setIdLoja(idLoja);
 
-            // 3. Registra no log
+            
             log.vendaParaLoja(v);
 
-            // 4. Retorna o veículo
+            
             return v;
 
         } catch (InterruptedException e) {
@@ -72,15 +72,15 @@ public class FabricaImpl extends UnicastRemoteObject implements FabricaRemota {
         }
     }
 
-    /**
-     * Obtém o estado atual da fábrica.
-     *
-     * @return estado da fábrica
-     * @throws RemoteException em caso de erro de comunicação RMI
-     */
+    
+
+
+
+
+
     @Override
     public EstadoFabrica getEstado() throws RemoteException {
-        // Coleta estados das estações (placeholder)
+        
         List<EstadoEstacao> estadosEstacoes = new ArrayList<>();
         for (int i = 0; i < estacoes.size(); i++) {
             int idEstacao = i + 1;
@@ -93,27 +93,27 @@ public class FabricaImpl extends UnicastRemoteObject implements FabricaRemota {
         }
 
         return new EstadoFabrica(
-                estoqueGlobal.availablePermits(),      // estoque disponível
-                totalProduzidos.get(),                  // total produzidos
-                esteiraSaida.tamanhoAtual(),            // veículos na esteira
-                esteiraSaida.snapshot(),                // snapshot da esteira
-                estadosEstacoes,                        // estados das estações
-                log.getLogs()                           // últimos logs
+                estoqueGlobal.availablePermits(),      
+                totalProduzidos.get(),                  
+                esteiraSaida.tamanhoAtual(),            
+                esteiraSaida.snapshot(),                
+                estadosEstacoes,                        
+                log.getLogs()                           
         );
     }
 
-    /**
-     * Inicia a fábrica: ativa as estações e registra no RMI registry.
-     *
-     * @throws RemoteException em caso de erro RMI
-     */
+    
+
+
+
+
     public void iniciar() throws RemoteException {
-        // Inicia as 4 estações
+        
         for (Estacao estacao : estacoes) {
             estacao.iniciar();
         }
 
-        // Registra no RMI registry
+        
         try {
             Registry registry = LocateRegistry.createRegistry(1099);
             registry.bind("Fabrica", this);
