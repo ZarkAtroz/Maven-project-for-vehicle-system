@@ -60,10 +60,20 @@ public class LojaImpl extends UnicastRemoteObject implements LojaRemota {
             Veiculo v = esteiraLocal.retirar();
 
             // 2. Incrementa contador de vendidos
-            totalVendidos.incrementAndGet();
+            int vendidos = totalVendidos.incrementAndGet();
 
             // 3. Registra no log
             log.vendaParaCliente(v, idCliente);
+
+            // Print em tempo real
+            System.out.println("[LOJA-" + id + "] vendeu para Cliente-" + idCliente + ": " + v);
+
+            // Resumo a cada 5 vendas
+            if (vendidos % 5 == 0) {
+                System.out.println("[LOJA-" + id + "] resumo: recebidos=" + totalRecebidos.get()
+                        + " | vendidos=" + vendidos
+                        + " | em estoque=" + esteiraLocal.tamanhoAtual());
+            }
 
             // 4. Retorna o veículo
             return v;
@@ -120,6 +130,9 @@ public class LojaImpl extends UnicastRemoteObject implements LojaRemota {
 
                         // Registra no log
                         log.recebimentoNaLoja(v, id);
+
+                        // Print em tempo real
+                        System.out.println("[LOJA-" + id + "] recebeu: " + v + " | PosLoja=" + pos);
 
                     } catch (RemoteException e) {
                         System.err.println("Erro ao solicitar veículo da fábrica: " + e.getMessage());
